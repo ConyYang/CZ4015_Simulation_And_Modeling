@@ -8,6 +8,8 @@ import Utils.FileReader;
 import Utils.RandomNumberGenerator;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -16,10 +18,15 @@ public class ParentSimulation {
     public final int totalEventCount = 10000;
     public double clock;
     public ArrayList<BaseStation> baseStationArrayList;
+
+    protected FileWriter csvWriter;
+
     protected int blockedCallCount;
     protected int droppedCallCount;
 
     protected PriorityQueue<ParentEvent> parentEventsQueue;
+    protected int j = 1;
+
 
     public ParentSimulation(){
         this.clock = 0;
@@ -30,7 +37,7 @@ public class ParentSimulation {
         this.baseStationArrayList = new ArrayList<>();
     }
 
-    public void startSimulation() throws FileNotFoundException {
+    public void startSimulation() throws IOException {
         FileReader reader = new FileReader("Data/PCS_TEST_DETERMINSTIC.csv");
         reader.readLine();
 
@@ -60,7 +67,7 @@ public class ParentSimulation {
                     callDurationTime,
                     position
             );
-            System.out.println("Create Event: "+ initEvent);
+           // System.out.println("Create Event: "+ initEvent);
             parentEventsQueue.add(initEvent);
 
             // Handel first Event
@@ -70,9 +77,11 @@ public class ParentSimulation {
         while (!parentEventsQueue.isEmpty()){
             handleEvent();
         }
+        csvWriter.flush();
+        csvWriter.close();
     }
 
-    public void handleEvent(){}
+    public void handleEvent() throws IOException {}
 
     /**
      * Static Method Comparator for event queue
@@ -95,4 +104,8 @@ public class ParentSimulation {
     public int getDroppedCallCount() {
         return droppedCallCount;
     }
+
+    public double getBlockedRate() {return (double)droppedCallCount / totalEventCount;}
+
+    public double getDroppedRate() {return (double)blockedCallCount / totalEventCount;}
 }

@@ -17,7 +17,7 @@ public class GenerateNextEvent {
 
         if (currEvent instanceof InitiationEvent){
             double currPosition = currEvent.getPosition();
-            System.out.println("[Simulation.GenerateNextEvent] The current car is at position: "+currPosition+" to baseStation "+currEvent.getDirection());
+           // System.out.println("[Simulation.GenerateNextEvent] The current car is at position: "+currPosition+" to baseStation "+currEvent.getDirection());
 
             if (currEvent.getDirection().equals(Direction.TO_BS_1)){
                 remainDistTONextBS = currPosition;
@@ -33,8 +33,8 @@ public class GenerateNextEvent {
         // Get duration of next event time
         double currEventCallDuration = currEvent.getCallDuration();
         remainingTimeToNextBS_CalByDist = remainDistTONextBS / (currEvent.getSpeed()*1000.00/3600.00);
-        System.out.println("Simulation.GenerateNextEvent remainingTimeToNextBS_CalByDist: "+remainingTimeToNextBS_CalByDist+
-                "Call Duration"+ currEventCallDuration);
+        // System.out.println("Simulation.GenerateNextEvent remainingTimeToNextBS_CalByDist: "+remainingTimeToNextBS_CalByDist+
+           //     "Call Duration"+ currEventCallDuration);
         if (remainingTimeToNextBS_CalByDist< currEvent.getCallDuration()){
             realRemainingTimeToNextBS = remainingTimeToNextBS_CalByDist;
         }else{
@@ -52,7 +52,7 @@ public class GenerateNextEvent {
                     currEvent.getSpeed(), // speed
                     nextEventDuration, // call duration
                     0.0); // positions
-            System.out.println("Create next event: "+nextEvent.toString());
+           // System.out.println("Create next event: "+nextEvent.toString());
         } else if (currEventCallDuration > realRemainingTimeToNextBS && currEvent.getDirection() == Direction.TO_BS_20 && currEvent.getBaseStation().getId()!=20){
             nextEvent = new HandoverEvent(
                     currEvent.getEventID(), //event ID
@@ -62,7 +62,7 @@ public class GenerateNextEvent {
                     currEvent.getSpeed(), // speed
                     nextEventDuration, // call duration
                     0.0); // positions
-            System.out.println("Create next event: "+nextEvent.toString());
+           // System.out.println("Create next event: "+nextEvent.toString());
         } else {
             // call end before reach nextBS
             nextEvent = new TerminationEvent(
@@ -70,7 +70,7 @@ public class GenerateNextEvent {
                     currEvent.getBaseStation(),
                     clock+realRemainingTimeToNextBS
             );
-            System.out.println("Creat next event: "+nextEvent.toString());
+           // System.out.println("Creat next event: "+nextEvent.toString());
         }
         return nextEvent;
     }
