@@ -5,9 +5,8 @@ import Components.Direction;
 import Event.InitiationEvent;
 import Event.ParentEvent;
 import Utils.FileReader;
-import Utils.RandomNumberGenerator;
+import Utils.RNGTest;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +15,9 @@ import java.util.PriorityQueue;
 
 public class ParentSimulation {
     public final int totalEventCount = 10000;
+    public final int warmUpEventCount = 1700;
+    protected int eventCount;
+
     public double clock;
     public ArrayList<BaseStation> baseStationArrayList;
 
@@ -37,8 +39,8 @@ public class ParentSimulation {
         this.baseStationArrayList = new ArrayList<>();
     }
 
-    public void startSimulation() throws IOException {
-        FileReader reader = new FileReader("Data/PCS_TEST_DETERMINSTIC.csv");
+    public void startSimulation(String dataFileName) throws IOException {
+        FileReader reader = new FileReader(dataFileName);
         reader.readLine();
 
         String[] row = null;
@@ -47,16 +49,22 @@ public class ParentSimulation {
         int baseStationNo = -1;
         double callDurationTime = 0.0;
         double velocity = 0.0;
+        Direction direction;
+        double position;
 
         for (int i = 0; i < totalEventCount; i++) {
             row = reader.readLine();
-            arrivalNo = Integer.parseInt(row[0]);
-            arrivalTime = Double.parseDouble(row[1]);
-            baseStationNo = Integer.parseInt(row[2]);
+            arrivalNo = (int)Double.parseDouble(row[0]);
+            baseStationNo = (int)Double.parseDouble(row[1]);
+            arrivalTime = Double.parseDouble(row[2]);
             callDurationTime = Double.parseDouble(row[3]);
             velocity = Double.parseDouble(row[4]);
-            Direction direction = RandomNumberGenerator.generateDirection();
-            double position = RandomNumberGenerator.generatePosition();
+            if ((int)Double.parseDouble(row[5])==1){
+                direction = Direction.TO_BS_1;
+            }else{
+                direction = Direction.TO_BS_20;
+            }
+            position = Double.parseDouble(row[6]);
 
             InitiationEvent initEvent = new InitiationEvent(
                     arrivalNo,
@@ -77,8 +85,11 @@ public class ParentSimulation {
         while (!parentEventsQueue.isEmpty()){
             handleEvent();
         }
-        csvWriter.flush();
-        csvWriter.close();
+        /**
+         * Code for WarmUp Period Analyze
+         */
+//        csvWriter.flush();
+//        csvWriter.close();
     }
 
     public void handleEvent() throws IOException {}

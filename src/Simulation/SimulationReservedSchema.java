@@ -14,14 +14,16 @@ public class SimulationReservedSchema extends ParentSimulation{
     /**
      * Constructor
      */
-    public SimulationReservedSchema(String fileName) throws IOException {
+    public SimulationReservedSchema() throws IOException {
         super();
-
-        csvWriter = new FileWriter(fileName);
-        csvWriter.append("DroppedCount");
-        csvWriter.append(",");
-        csvWriter.append("BlockedCount");
-        csvWriter.append("\n");
+        /**
+         * Code for warmup analyze
+         */
+//        csvWriter = new FileWriter(fileName);
+//        csvWriter.append("DroppedCount");
+//        csvWriter.append(",");
+//        csvWriter.append("BlockedCount");
+//        csvWriter.append("\n");
 
         for (int i = 0; i < 20; i++) {
             BaseStation bs = new BaseStation(i+1,9);
@@ -50,9 +52,17 @@ public class SimulationReservedSchema extends ParentSimulation{
              //   System.err.println(("Current BS " + currentBS.getId() + "Has no channel: " + currentBS.getNumOfFreeChannel()));
                 blockedCallCount += 1;
             }
-            csvWriter.append(String.join(",", Integer.toString(droppedCallCount), Integer.toString( blockedCallCount)));
-            csvWriter.append("\n");
-            j+=1;
+            /**
+             * Code for warm up period analyze
+             */
+//            csvWriter.append(String.join(",", Integer.toString(droppedCallCount), Integer.toString( blockedCallCount)));
+//            csvWriter.append("\n");
+//            j+=1;
+            eventCount+=1;
+            if (eventCount == warmUpEventCount){
+                blockedCallCount = 0;
+                droppedCallCount = 0;
+            }
         }
         else if (currEvent instanceof HandoverEvent){
           //  System.out.println("~~~~~~~~~~~~~Handover Event~~~~~~~~~~~~~~");
