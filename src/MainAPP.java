@@ -11,7 +11,7 @@ public class MainAPP
     public static void main(String[] args) throws IOException {
 
         FileWriter csvWriter;
-        csvWriter = new FileWriter("ReservedSimulationResult.csv");
+        csvWriter = new FileWriter("NormalSimulationResult.csv");
         csvWriter.append("DroppedCount");
         csvWriter.append(",");
         csvWriter.append("BlockedCount");
@@ -21,21 +21,21 @@ public class MainAPP
         int totalBlockedCalls = -1;
 
         String datafilename = null;
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i <= 500; i++) {
             datafilename = "/Users/yangyubei/PycharmProjects/SimulationAndModeling/RandomNumberGenerate/SimulationData/data"+Integer.toString(i)+".csv";
-//            SimulationNormalSchema simulationNormalSchema = new SimulationNormalSchema();
-//            simulationNormalSchema.startSimulation(datafilename);
-//
-//            totalDroppedCalls = simulationNormalSchema.getDroppedCallCount();
-//            totalBlockedCalls = simulationNormalSchema.getBlockedCallCount();
+            SimulationNormalSchema simulationNormalSchema = new SimulationNormalSchema();
+            simulationNormalSchema.startSimulation(datafilename);
 
-            SimulationReservedSchema simulationReservedSchema = new SimulationReservedSchema();
-            simulationReservedSchema.startSimulation(datafilename);
-            totalBlockedCalls = simulationReservedSchema.getBlockedCallCount();
-            totalDroppedCalls = simulationReservedSchema.getDroppedCallCount();
+            totalDroppedCalls = simulationNormalSchema.getDroppedCallCount();
+            totalBlockedCalls = simulationNormalSchema.getBlockedCallCount();
 
-            System.out.println("Total Dropped calls: "+totalDroppedCalls);
-            System.out.println("Total Blocked calls: "+totalBlockedCalls);
+//            SimulationReservedSchema simulationReservedSchema = new SimulationReservedSchema();
+//            simulationReservedSchema.startSimulation(datafilename);
+//            totalBlockedCalls = simulationReservedSchema.getBlockedCallCount();
+//            totalDroppedCalls = simulationReservedSchema.getDroppedCallCount();
+            System.out.println(i);
+//            System.out.println("Total Dropped calls: "+totalDroppedCalls);
+//            System.out.println("Total Blocked calls: "+totalBlockedCalls);
 
             csvWriter.append(String.join(",", Integer.toString(totalDroppedCalls), Integer.toString(totalBlockedCalls)));
             csvWriter.append("\n");
